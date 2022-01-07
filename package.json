@@ -1,0 +1,14 @@
+{
+  "name": "doodlebob_discordbot",
+  "version": "1.0.0",
+  "description": "Discord Bot to have fun with your friends!",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jonathan Zepeda",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.5.0"
+  }
+}
