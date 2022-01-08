@@ -46,6 +46,6 @@ client.on('message', message => {
 });
 
 // Login Token
-client.login('OTI3NzIxNDc2NTM3MzQ0MDIx.YdOV9A.sfOTJQDVQ3Ol3cD9-EYcm7Y_zRY'); // Change Before Pushing**
+client.login(/*YOUR TOKEN*/); // Change Before Pushing**
 
 /** ------------ DOODLE BOB DISCORD BOT ------------ **/
