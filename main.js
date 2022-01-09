@@ -1,51 +1,54 @@
+// Token/IDs Setup
+const dotenv = require('dotenv')
+dotenv.config()
+
 /** ------------ DOODLE BOB DISCORD BOT ------------ **/
 
-// Prerequisites For discord.js API
-const Discord = require("discord.js");
-const client = new Discord.Client({intents: ["GUILDS", "GUILD_MESSAGES"]});
+// Discord API Setup
+const fs = require('fs');
+const { Client, Collection, Intents } = require('discord.js')
+const client = new Client({
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+  ]
+});
 
-client.once('ready', () => {
+// Command Handler Setup
+client.commands = new Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.data.name, command);
+}
+
+// Logging In... Bot Online
+client.on('ready', () => {
     console.log('\nDoodle Bob Bot Online ...\n');
 });
 
-// Prerequisites For Accessing Commands Directory
-const fs = require('fs');
-client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
-  client.commands.set(command.name, command);
-}
+// Command Handler Async Function, Execute Corresponding Commands
+client.on('interactionCreate', async interaction => {
+  // If Not A Command, Ingore
+	if (!interaction.isCommand()) return;
 
-// Command Prefix
-const prefix = '!';
+  // Grab Our Current Requested Command
+	const command = client.commands.get(interaction.commandName);
 
-// When Message Prompts ...
-client.on('message', message => {
-  // Precaution Bot Protection
-  if(!message.content.startsWith(prefix) || message.author.bot) {
-    return;
-  }
+  // If Not A Command, Ignore
+	if (!command) return;
 
-  // Allow Multiple Commands
-  const args = message.content.slice(prefix.length).split(/ +/);
-  const command = args.shift().toLowerCase();
-
-  // PING Command Call --------------
-  if (command === 'ping') {
-    client.commands.get('ping').execute(message, args);
-
-  // EMBED Command Call -------------
-  } else if (command === 'embed') {
-    client.commands.get('embed').execute(message, args, Discord);
-
-  // BUTTON Command Call ------------
-  } else if (command === 'button') {
-    client.commands.get('button').execute(message, args, Discord);
-  }
+  // Execute Our Command, Throw Error If Not Applicable.
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
 });
 
 // Login Token
-client.login(/*YOUR TOKEN*/); // Change Before Pushing**
+client.login(process.env.TOKEN);
 
 /** ------------ DOODLE BOB DISCORD BOT ------------ **/
