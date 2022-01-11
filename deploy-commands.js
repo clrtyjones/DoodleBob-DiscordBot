@@ -1,4 +1,5 @@
 // File Used For Generating New Commands!
+// - Run This File When Adding New Commands.
 
 const fs = require('fs');
 const { REST } = require('@discordjs/rest');

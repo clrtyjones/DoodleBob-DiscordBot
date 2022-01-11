@@ -11,6 +11,7 @@ const client = new Client({
   intents: [
     Intents.FLAGS.GUILDS,
     Intents.FLAGS.GUILD_MESSAGES,
+	Intents.FLAGS.GUILD_VOICE_STATES,
   ]
 });
 
@@ -30,16 +31,16 @@ client.on('ready', () => {
 
 // Command Handler Async Function, Execute Corresponding Commands
 client.on('interactionCreate', async interaction => {
-  // If Not A Command, Ingore
+  	// If Not A Command, Ingore
 	if (!interaction.isCommand()) return;
 
-  // Grab Our Current Requested Command
+  	// Grab Our Current Requested Command
 	const command = client.commands.get(interaction.commandName);
 
-  // If Not A Command, Ignore
+  	// If Not A Command, Ignore
 	if (!command) return;
 
-  // Execute Our Command, Throw Error If Not Applicable.
+  	// Execute Our Command, Throw Error If Not Applicable.
 	try {
 		await command.execute(interaction);
 	} catch (error) {
