@@ -8,6 +8,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('leave')
 		.setDescription('Leaves the VC.'),
+    
 	async execute(interaction) {
 		
         // If User Not In Voice Channel, Return
