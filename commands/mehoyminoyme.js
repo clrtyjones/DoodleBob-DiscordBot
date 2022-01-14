@@ -1,14 +1,15 @@
-/** ------------ PING COMMAND ------------ **/
+/** ------------ MEHOYMINOYME COMMAND ------------ **/
 
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('mehoyminoyme')
-		.setDescription('Replies with Pong!'),
+		.setDescription('🧽 Doodle Bob VC Annoyance! 🧽'),
+
 	async execute(interaction) {
 		await interaction.reply('Pong!');
 	},
 };
   
-  /** ------------ PING COMMAND ------------ **/
+  /** ------------ MEHOYMINOYME COMMAND ------------ **/
