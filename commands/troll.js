@@ -5,18 +5,41 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 // Voice Channel Connection Set Up
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('troll')
 		.setDescription('Troll a user by having the bot speak over them!')
-		.addUserOption(option => option.setName("user").setDescription("The user to troll").setRequired(true)),
+		.addUserOption(option => option.setName("user").setDescription("The user to troll!").setRequired(true)),
 
 	async execute(interaction) {
+
+		// Initialize Our Victim
+		const victim = interaction.options.getUser("user");
+
+		// If User Selected Bot, Prompt Error Msg.
+		if (victim.bot) {
+			const botErrEmbed = new MessageEmbed ()
+			.setColor("RED")
+			.setTitle(`🧽 Sorry, can\'t target bot: ***${victim.username}***`)
+			.setDescription('Please try again!')
+			.setThumbnail(victim.avatarURL())
+
+			return interaction.reply({ embeds: [botErrEmbed] });
+		}
 		
-		// If User Not In Voice Channel, Return
-        const voiceChannel = interaction.member.voice.channel;
-        if(!voiceChannel) return interaction.reply('You must be in a Voice Channel to use this command!');
+		// If Selected Victim Is Not In Voice Channel, Prompt Stalker Msg.
+        const voiceChannel = victim.client.voice.channel;
+        if(!voiceChannel) {
+			const stalkEmbed = new MessageEmbed ()
+			.setColor("YELLOW")
+			.setTitle(`🧽 Victim: ***${victim.username}*** ...`)
+			.setDescription('*Will join VC when they do!*')
+			.setThumbnail(victim.avatarURL())
+
+			return interaction.reply({ embeds: [stalkEmbed] });
+		}
 
 		// Join The Voice Connection
         const connection = joinVoiceChannel ({
